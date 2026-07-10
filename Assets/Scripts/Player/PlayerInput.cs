@@ -4,11 +4,13 @@ using UnityEngine.InputSystem;
 public class PlayerInput : MonoBehaviour
 {
     private PlayerMovement movement;
+    PlayerBattle battle;
 
     public Vector2 axis;
     void Awake()
     {
         movement = GetComponent<PlayerMovement>();
+        battle = GetComponent<PlayerBattle>();
     }
     public void OnMove(InputValue value)
     {
@@ -22,5 +24,9 @@ public class PlayerInput : MonoBehaviour
     public void OnJump()
     {
         movement.Jump();
+    }
+    public void OnAttack()
+    {
+        battle.Attack();
     }
 }
