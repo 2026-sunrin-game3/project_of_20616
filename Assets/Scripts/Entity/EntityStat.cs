@@ -18,6 +18,7 @@ public class EntityStat : MonoBehaviour
         public MathType mathType;
         public float Value;
     }
+    [System.Serializable]
     struct StatValue
     {
         public string Key;
@@ -26,18 +27,15 @@ public class EntityStat : MonoBehaviour
 [SerializeField]
 List<StatValue> defaultStat = new()
     {
-        new StatValue{Key = "attackDAmage", Value = 3},
+        new StatValue{Key = "attackDamage", Value = 3},
         new StatValue{Key = "defense", Value = 0},
         new StatValue{Key = "increaseDamage",Value=0 },
         new StatValue{Key = "critPer",Value = 0},
-        new StatValue{Key = "criltMul",Value = 0},
+        new StatValue{Key = "critMul",Value = 0},
         new StatValue{Key = "hurtDamage",Value = 0},
         new StatValue{Key = "atkSpeed",Value=0},
         new StatValue{Key="moveSpeed",Value=0},
     };
-    public float attackDamage, defense, increaseDamage;
-    // 공격력 방어력 가하는 피해 증가 치명타 확률 / 피해, 받는 피해 증가,공격 속도, 이동 속도
-    public float critPer, critMul, hurtDamage, atkSpeed, moveSpeed;
     void Start()
     {
         foreach(StatValue val in defaultStat)

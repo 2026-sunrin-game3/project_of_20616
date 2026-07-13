@@ -4,15 +4,18 @@ public class PlayerMovement : MonoBehaviour
 {
     //reference
     private Rigidbody2D rigid;
+    EntityStat stat;
     public float moveSpeed = 3f,jumpPower = 12f;
     [SerializeField] LayerMask groundMask_;
     [SerializeField] float groundDist_ = 0.5f;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        stat = GetComponent<EntityStat>();
     }
     public void Move(Vector2 axis)
     {
+        float moveSpeed = stat.GetResultValue("moveSpeed");
         transform.Translate(axis.normalized * moveSpeed * Time.deltaTime);
     }
     public void SetVelocity(Vector2 dir)

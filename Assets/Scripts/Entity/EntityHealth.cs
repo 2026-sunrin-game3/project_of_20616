@@ -71,6 +71,10 @@ public class EntityHealth : MonoBehaviour
         float dmg = ctx.damage * (1 + stat.GetResultValue("hurtDamage") / 100);
         if (UnityEngine.Random.Range(0, 100) <= critPer)
             dmg *= 1 + critMul / 100;
+        dmg -= stat.GetResultValue("defense");
+        if (dmg < 0)
+            dmg = 0;
+    
         health -= dmg;
 
         if (health <= 0)
