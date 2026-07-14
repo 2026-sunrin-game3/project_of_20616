@@ -5,11 +5,12 @@ public class PlayerInput : MonoBehaviour
 {
     private PlayerMovement movement;
     PlayerBattle battle;
-
+    PlayerAnimator animator;
     public Vector2 axis;
     void Awake()
     {
         movement = GetComponent<PlayerMovement>();
+        animator = GetComponent<PlayerAnimator>();
         battle = GetComponent<PlayerBattle>();
     }
     public void OnMove(InputValue value)
@@ -23,10 +24,12 @@ public class PlayerInput : MonoBehaviour
     }
     public void OnJump()
     {
-        movement.Jump();
+        if(movement.Jump())
+            animator.Jump();
     }
     public void OnAttack()
     {
         battle.Attack();
+        animator.Play("Attack1");
     }
 }

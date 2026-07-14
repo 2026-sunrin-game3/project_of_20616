@@ -29,12 +29,16 @@ public class PlayerMovement : MonoBehaviour
         Collider2D[] cast = Physics2D.OverlapBoxAll(center, size, 0f, groundMask_);
         return cast.Length > 0;
     }
-    public void Jump()
+    public bool Jump()
     {
         if(OnGround())
+        {
             SetVelocity(Vector2.up * jumpPower);
+            return true;
+        }
+        return false;
     }
-    void onDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(transform.position + Vector3.down * groundDist_ * 0.5f, new Vector3(0.3f, groundDist_));

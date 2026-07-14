@@ -48,6 +48,10 @@ List<StatValue> defaultStat = new()
     {
         return resultValue[Key];
     }
+    public float GetBaseValue(string Key)
+    {
+        return baseValue[Key];
+    }
     public float Calc(string key)
     {
         float value = baseValue[key];
