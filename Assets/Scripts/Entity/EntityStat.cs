@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 public enum MathType
 {
     Increase,
@@ -24,38 +24,41 @@ public class EntityStat : MonoBehaviour
         public string Key;
         public float Value;
     }
-[SerializeField]
-List<StatValue> defaultStat = new()
+    [SerializeField]
+    List<StatValue> defaultStat = new()
     {
-        new StatValue{Key = "attackDamage", Value = 3},
-        new StatValue{Key = "defense", Value = 0},
-        new StatValue{Key = "increaseDamage",Value=0 },
-        new StatValue{Key = "critPer",Value = 0},
-        new StatValue{Key = "critMul",Value = 0},
-        new StatValue{Key = "hurtDamage",Value = 0},
-        new StatValue{Key = "atkSpeed",Value=0},
-        new StatValue{Key="moveSpeed",Value=0},
+        new StatValue{Key="attackDamage", Value=3},
+        new StatValue{Key="defense", Value=0},
+        new StatValue{Key="increaseDamage", Value=0},
+        new StatValue{Key="critPer", Value=30},
+        new StatValue{Key="critMul", Value=0},
+        new StatValue{Key="hurtDamage", Value=0},
+        new StatValue{Key="atkSpeed", Value=0},
+        new StatValue{Key="moveSpeed", Value=0},
     };
+
     void Start()
     {
-        foreach(StatValue val in defaultStat)
+        foreach (StatValue val in defaultStat)
         {
             baseValue[val.Key] = val.Value;
             Calc(val.Key);
         }
     }
-    public float GetResultValue(string Key)
+    public float GetResultValue(string key)
     {
-        return resultValue[Key];
+        return resultValue[key];
     }
-    public float GetBaseValue(string Key)
+    public float GetBaseValue(string key)
     {
-        return baseValue[Key];
+        return baseValue[key];
     }
+
     public float Calc(string key)
     {
         float value = baseValue[key];
-        float increase = 100;
+        float increase = 120;
+
         foreach (Buf buf in bufs)
         {
             switch (buf.mathType)
@@ -74,6 +77,7 @@ List<StatValue> defaultStat = new()
                     break;
             }
         }
+
         return resultValue[key] = value * increase * 0.01f;
     }
 }
