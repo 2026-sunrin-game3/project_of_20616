@@ -4,43 +4,53 @@ public abstract class Enemy : MonoBehaviour
 {
     public EntityHealth health;
     public EntityStat stat;
+    public Rigidbody2D rigid;
     public float direction;
-    
     [SerializeField] LayerMask groundMask_;
     [SerializeField] float groundDist_ = 0.5f;
-    public Rigidbody2D rigid;
     public float atkCool;
     [SerializeField] LayerMask enemyMask;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] DamageIndicator indicator;
     void Start()
     {
         health = GetComponent<EntityHealth>();
         stat = GetComponent<EntityStat>();
         rigid = GetComponent<Rigidbody2D>();
+
+        health.OnDamage(OnHurt);
+        health.OnDeath(OnDeath);
     }
+
+    void OnDeath(EntityHealth.Context ctx)
+    {
+        Destroy(gameObject);
+    }
+
+    void OnHurt(EntityHealth.Context ctx)
+    {
+        indicator.IndicateDamage(ctx.damage, transform.position + new Vector3(Random.Range(-0.3f, 0.3f), 1), Color.orange);
+    }
+
     void Update()
     {
         if (atkCool > 0)
-        {
             atkCool -= Time.deltaTime * (1 + stat.GetResultValue("atkSpeed") / 100);
-        }
+            
         MobUpdate();
     }
-    protected virtual void MobUpdate()
-    {
-    }
+    protected virtual void MobUpdate(){}
+
     public void Chase(Transform target)
     {
         if (target.position.x > transform.position.x)
         {
             Move(Vector2.right);
-        }
-        else if (target.position.x < transform.position.x)
+        } else if (target.position.x < transform.position.x)
         {
             Move(Vector2.left);
         }
     }
-    
+
     public void Move(Vector2 axis)
     {
         float moveSpeed = stat.GetResultValue("moveSpeed");
@@ -50,13 +60,19 @@ public abstract class Enemy : MonoBehaviour
     {
         rigid.linearVelocity = dir;
     }
+
     public void Attack(float cool, AttackRange range, Vector2 center)
     {
         if (atkCool > 0)
             return;
         atkCool = cool;
 
-        var col = Physics2D.OverlapBoxAll(center + range.offset, range.size, 0, enemyMask);
+        var col = Physics2D.OverlapBoxAll(center + range.offset,
+            range.size,
+            0,
+            enemyMask
+        );
+
         foreach (var target in col)
         {
             EntityHealth hp = target.GetComponent<EntityHealth>();
@@ -66,14 +82,16 @@ public abstract class Enemy : MonoBehaviour
             }
         }
     }
+
     public bool OnGround()
     {
         Vector2 center = transform.position + Vector3.down * groundDist_ * 0.5f;
         Vector2 size = new Vector3(0.3f, groundDist_);
         Collider2D[] cast = Physics2D.OverlapBoxAll(center, size, 0f, groundMask_);
+
         return cast.Length > 0;
     }
-    
+
     protected void Draw(AttackRange range)
     {
         if (!range.drawGizmos)
@@ -87,8 +105,6 @@ public abstract class Enemy : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawCube(transform.position + Vector3.down * groundDist_ * 0.5f, new Vector3(0.3f, groundDist_));
     }
-    protected virtual void DrawGizmos()
-    {
 
-    }
+    protected virtual void DrawGizmos() {}
 }
